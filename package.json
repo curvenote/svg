@@ -62,8 +62,8 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "@iooxa/ink-basic": "^0.2.2",
-    "@iooxa/runtime": "^0.2.2",
+    "@iooxa/ink-basic": "^0.2.3",
+    "@iooxa/runtime": "^0.2.3",
     "d3-array": "^2.4.0",
     "d3-axis": "^1.0.12",
     "d3-drag": "^1.2.5",
