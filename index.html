@@ -30,6 +30,30 @@
       <ink-chart-node :x="x" :y="y" :drag="{x: Math.max(Math.min(50, x), 25), y}" :constrain="[Math.max(Math.min(50, x), 25), y]"></ink-chart-node>
       <ink-chart-node :x="x1" :y="y1" :drag="{x1: x, y1: y}"></ink-chart-node>
     </ink-chart>
+
+    <ink-scope name="amp">
+      <ink-var name="parameterize" value="x" type="String"></ink-var>
+      <ink-var name="eqns" value='{"x": "Math.sin(x*a)", "y":"Math.sin(y*10*a)", "t":"[Math.sin(t)*t/a/10, Math.cos(t)*t/a/10]"}' type="Object"></ink-var>
+      <ink-var name="a" value="1"></ink-var>
+      <ink-var name="xlim" value="50"></ink-var>
+
+      <ink-select labels="X,Y,T" values="x,y,t" :value="parameterize" :change="{parameterize: value, eqn:eqns[value]}"></ink-select><br>
+      <ink-input :value="eqns[parameterize]" :change="{eqns: {...eqns, [parameterize]: value}}"></ink-input><br>
+      <p>A: <ink-range bind="a" min="0.5" max="10" step="0.1"></ink-range> <ink-display bind="a"></ink-display></p>
+      <ink-visible :visible="parameterize == 't'">
+        <p>Domain: <ink-range bind="xlim" min="0.5" max="100" step="0.1"></ink-range> <ink-display bind="xlim"></ink-display></p>
+      </ink-visible>
+
+      <script>
+        function func(x, a){
+          return Math.atan(x)/a;
+        }
+      </script>
+      <ink-chart :xlabel="eqns[parameterize]" :ylim="[-1.1, 1.1]" :xlim="[-Math.PI, Math.PI]">
+        <ink-chart-eqn :eqn="eqns[parameterize]" :parameterize="parameterize" :domain="parameterize === 't' ? [0,xlim] : [null, null]" :listen="a"></ink-chart-eqn>
+        <ink-chart-eqn eqn="func(x, a)" ></ink-chart-eqn>
+      </ink-chart>
+    </ink-scope>
   </article>
 </body>
 </html>

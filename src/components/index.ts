@@ -2,6 +2,7 @@ import { actions, provider } from '@iooxa/runtime';
 import InkChart from './chart';
 import InkChartText from './text';
 import InkChartPath from './path';
+import InkChartEqn from './equation';
 import InkChartCircle from './circle';
 import InkChartNode from './node';
 import InkChartImage from './image';
@@ -22,6 +23,7 @@ export const register = () => {
   registerComponent('ink-chart', InkChart);
   registerComponent('ink-chart-text', InkChartText);
   registerComponent('ink-chart-path', InkChartPath);
+  registerComponent('ink-chart-eqn', InkChartEqn);
   registerComponent('ink-chart-circle', InkChartCircle);
   registerComponent('ink-chart-image', InkChartImage);
   registerComponent('ink-chart-node', InkChartNode);
@@ -31,6 +33,7 @@ export {
   InkChart,
   InkChartText,
   InkChartPath,
+  InkChartEqn,
   InkChartCircle,
   InkChartImage,
   InkChartNode,

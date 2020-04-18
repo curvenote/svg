@@ -2,6 +2,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import ink, { types, setup } from '@iooxa/runtime';
 import basic from '@iooxa/ink-basic';
+import '@iooxa/ink-basic/dist/ink.css';
 import * as components from './src/components';
 import './src/index.css';
 import './index.css';
