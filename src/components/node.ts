@@ -1,18 +1,17 @@
 import {
-  BaseComponent, withInk, svg, THROTTLE_SKIP,
-} from '@iooxa/ink-basic';
+  BaseComponent, withRuntime, svg, throttle, THROTTLE_SKIP,
+} from '@iooxa/components';
 import { types } from '@iooxa/runtime';
 import * as Selection from 'd3-selection';
 import * as Drag from 'd3-drag';
-import { throttle } from 'underscore';
-import InkChart from './chart';
+import Chart from './chart';
 import { nextColor } from './utils';
 
-const CURSOR_MOVE_CLASS = 'ink-drag-move';
+const CURSOR_MOVE_CLASS = 'cursor-move';
 
-export const InkChartNodeSpec = {
-  name: 'chart-node',
-  description: 'Chart node',
+export const SvgNodeSpec = {
+  name: 'svg-node',
+  description: 'SVG node',
   properties: {
     visible: { type: types.PropTypes.boolean, default: true },
     x: { type: types.PropTypes.number, default: 0.5 },
@@ -23,19 +22,20 @@ export const InkChartNodeSpec = {
     r: { type: types.PropTypes.number, default: 5 },
     fill: { type: types.PropTypes.string, default: 'none' },
     stroke: { type: types.PropTypes.string, default: '' },
-    strokeWidth: { type: types.PropTypes.number, default: 1.5 },
-    strokeDasharray: { type: types.PropTypes.string, default: null },
+    strokeWidth: { type: types.PropTypes.number, default: 1.5, attribute: 'stroke-width' },
+    strokeDasharray: { type: types.PropTypes.string, default: null, attribute: 'stroke-dasharray' },
   },
   events: {
     drag: { args: ['x', 'y'] },
+    dragging: { args: ['value'] },
   },
 };
 
 const litProps = {};
 
-@withInk(InkChartNodeSpec, litProps)
-class InkChartNode extends BaseComponent<typeof InkChartNodeSpec> {
-  #chart?: InkChart;
+@withRuntime(SvgNodeSpec, litProps)
+class SvgNode extends BaseComponent<typeof SvgNodeSpec> {
+  #chart?: Chart;
 
   constructor() {
     super();
@@ -43,19 +43,19 @@ class InkChartNode extends BaseComponent<typeof InkChartNodeSpec> {
     this.setAttribute('fill', nextColor());
   }
 
-  requestInkUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
 
-  renderSVG(chart: InkChart) {
+  renderSVG(chart: Chart) {
     this.#chart = chart;
     const {
       visible, constrain, r, fill, x, y, stroke, strokeWidth, strokeDasharray,
-    } = this.ink!.state;
+    } = this.$runtime!.state;
     if (!visible) return svg``;
 
     // wrap the function handler, as it is called from the ink-chart context
-    function wrapper(node: InkChartNode) { return (e: Event) => node.setupDrag(e); }
+    function wrapper(node: SvgNode) { return (e: Event) => node.setupDrag(e); }
 
-    const constrainFunc = this.ink!.component?.properties.constrain.func ?? '';
+    const constrainFunc = this.$runtime!.component?.properties.constrain.func ?? '';
     const [xVal, yVal] = (constrainFunc !== '' ? constrain : [x, y]) as number[];
 
     return svg`<circle class="drag" r="${r}" fill="${fill}" cx="${chart.x(xVal)}" cy="${chart.y(yVal)}" @mouseover=${wrapper(this)} stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}"></circle>`;
@@ -70,13 +70,14 @@ class InkChartNode extends BaseComponent<typeof InkChartNodeSpec> {
     const node = Selection.select(rawNode as Element);
 
     const throttled = throttle(
-      (x: number, y: number) => this.ink?.dispatchEvent('drag', [x, y]),
+      (x: number, y: number) => this.$runtime?.dispatchEvent('drag', [x, y]),
       THROTTLE_SKIP / 3,
     );
 
     const drag = Drag.drag().on('start', () => {
       Selection.event.sourceEvent.preventDefault();
       bodyClassList.add(CURSOR_MOVE_CLASS);
+      this.$runtime?.dispatchEvent('dragging', [true]);
     }).on('drag', () => {
       Selection.event.sourceEvent.preventDefault();
       const x = this.#chart!.x.invert(Selection.event.x);
@@ -84,6 +85,7 @@ class InkChartNode extends BaseComponent<typeof InkChartNodeSpec> {
       throttled(x, y);
     }).on('end', () => {
       bodyClassList.remove(CURSOR_MOVE_CLASS);
+      this.$runtime?.dispatchEvent('dragging', [false]);
     });
     node.call(drag);
     // Remember to mark the rawNode
@@ -91,4 +93,4 @@ class InkChartNode extends BaseComponent<typeof InkChartNodeSpec> {
   }
 }
 
-export default InkChartNode;
+export default SvgNode;

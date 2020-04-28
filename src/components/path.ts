@@ -1,29 +1,33 @@
-import { BaseComponent, withInk, svg } from '@iooxa/ink-basic';
+import { BaseComponent, withRuntime, svg } from '@iooxa/components';
 import { types } from '@iooxa/runtime';
 import * as shape from 'd3-shape';
-import InkChart from './chart';
+import Chart from './chart';
 import { nextColor } from './utils';
 
-export const InkChartPathSpec = {
-  name: 'chart-path',
-  description: 'Chart',
+export const SvgPathSpec = {
+  name: 'svg-path',
+  description: 'SVG Path',
   properties: {
     visible: { type: types.PropTypes.boolean, default: true },
     data: { type: types.PropTypes.array, default: [[0, 0]] },
     stroke: { type: types.PropTypes.string, default: '' },
-    strokeWidth: { type: types.PropTypes.number, default: 1.5 },
-    strokeDasharray: { type: types.PropTypes.string, default: null },
+    strokeWidth: { type: types.PropTypes.number, default: 1.5, attribute: 'stroke-width' },
+    strokeDasharray: { type: types.PropTypes.string, default: null, attribute: 'stroke-dasharray' },
+    curve: { type: types.PropTypes.string, default: 'linear' },
+    closed: { type: types.PropTypes.boolean, default: false },
   },
-  events: {},
+  events: {
+    hover: { args: ['enter'] },
+  },
 };
 
 const litProps = {};
 
-@withInk(InkChartPathSpec, litProps)
-class InkChartPath extends BaseComponent<typeof InkChartPathSpec> {
-  #chart?: InkChart;
+@withRuntime(SvgPathSpec, litProps)
+class SvgPath extends BaseComponent<typeof SvgPathSpec> {
+  #chart?: Chart;
 
-  requestInkUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
 
   constructor() {
     super();
@@ -31,11 +35,11 @@ class InkChartPath extends BaseComponent<typeof InkChartPathSpec> {
     this.setAttribute('stroke', nextColor());
   }
 
-  renderSVG(chart: InkChart) {
+  renderSVG(chart: Chart) {
     this.#chart = chart;
     const {
-      visible, stroke, strokeWidth, strokeDasharray, data,
-    } = this.ink!.state;
+      visible, stroke, strokeWidth, strokeDasharray, data, curve, closed,
+    } = this.$runtime!.state;
     if (!visible) return svg``;
 
     const path = shape.line()
@@ -45,9 +49,22 @@ class InkChartPath extends BaseComponent<typeof InkChartPathSpec> {
       ))
       .x((d: number[]) => chart.x(d[0]))
       .y((d: number[]) => chart.y(d[1]));
+    switch (curve) {
+      case 'linear':
+        path.curve(!closed ? shape.curveLinear : shape.curveLinearClosed);
+        break;
+      case 'basis':
+        path.curve(!closed ? shape.curveBasis : shape.curveBasisClosed);
+        break;
+      default:
+        break;
+    }
 
-    return svg`<path class="line" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}" d="${path(data as [number, number][])}"></path>`;
+    // wrap the function handler, as it is called from the ink-chart context
+    function wrapper(node: SvgPath, enter: boolean) { return () => node.$runtime?.dispatchEvent('hover', [enter]); }
+
+    return svg`<path class="line" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}" d="${path(data as [number, number][])}" @mouseenter=${wrapper(this, true)} @mouseleave=${wrapper(this, false)}></path>`;
   }
 }
 
-export default InkChartPath;
+export default SvgPath;

@@ -8,7 +8,7 @@ module.exports = {
     usedExports: true,
   },
   entry: {
-    app: './ink.ts',
+    app: './iooxa.ts',
   },
   plugins: [
     // new CleanWebpackPlugin(),
@@ -18,7 +18,7 @@ module.exports = {
     }),
   ],
   output: {
-    filename: 'ink.min.js',
+    filename: 'iooxa.min.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {

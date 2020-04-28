@@ -1,21 +1,21 @@
-import { BaseComponent, withInk, svg } from '@iooxa/ink-basic';
+import { BaseComponent, withRuntime, svg } from '@iooxa/components';
 import {
   types, actions, provider, selectors, DEFAULT_SCOPE,
 } from '@iooxa/runtime';
 import * as shape from 'd3-shape';
 import * as array from 'd3-array';
-import InkChart from './chart';
+import Chart from './chart';
 import { nextColor } from './utils';
 
-export const InkChartEqnSpec = {
-  name: 'chart-eqn',
-  description: 'Chart equations',
+export const ChartEqnSpec = {
+  name: 'svg-eqn',
+  description: 'SVG equations',
   properties: {
     visible: { type: types.PropTypes.boolean, default: true },
     eqn: { type: types.PropTypes.string, default: 'x' },
     stroke: { type: types.PropTypes.string, default: '' },
-    strokeWidth: { type: types.PropTypes.number, default: 1.5 },
-    strokeDasharray: { type: types.PropTypes.string, default: null },
+    strokeWidth: { type: types.PropTypes.number, default: 1.5, attribute: 'stroke-width' },
+    strokeDasharray: { type: types.PropTypes.string, default: null, attribute: 'stroke-dasharray' },
     parameterize: { type: types.PropTypes.string, default: 'x' },
     samples: { type: types.PropTypes.number, default: 500 },
     domain: { type: types.PropTypes.array, default: [-Infinity, Infinity] },
@@ -23,7 +23,9 @@ export const InkChartEqnSpec = {
     // right now the equation is a string, which doesn't change, so need a way to trigger updates.
     listen: { type: types.PropTypes.number, default: '' },
   },
-  events: {},
+  events: {
+    hover: { args: ['enter'] },
+  },
 };
 
 const litProps = {};
@@ -49,9 +51,9 @@ function clipDomain(domain: number[], clip: number[]) {
   return out;
 }
 
-@withInk(InkChartEqnSpec, litProps)
-class InkChartEqn extends BaseComponent<typeof InkChartEqnSpec> {
-  #chart?: InkChart;
+@withRuntime(ChartEqnSpec, litProps)
+class ChartEqn extends BaseComponent<typeof ChartEqnSpec> {
+  #chart?: Chart;
 
   constructor() {
     super();
@@ -59,32 +61,32 @@ class InkChartEqn extends BaseComponent<typeof InkChartEqnSpec> {
     this.setAttribute('stroke', nextColor());
   }
 
-  requestInkUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
 
-  renderSVG(chart: InkChart) {
+  renderSVG(chart: Chart) {
     this.#chart = chart;
     const {
       visible, eqn, samples, domain, stroke, strokeWidth, strokeDasharray, parameterize,
-    } = this.ink!.state;
+    } = this.$runtime!.state;
     if (!visible) return svg``;
 
     let clippedDomain: number[];
     let funcXY: (d: number)=> [number, number];
     switch (parameterize.toLocaleLowerCase().trim()) {
       case 'x': {
-        const func = getFunction(this.ink, eqn, ['x']);
+        const func = getFunction(this.$runtime, eqn, ['x']);
         funcXY = (d: number) => [d, func(d)] as [number, number];
-        clippedDomain = clipDomain(domain, chart.ink!.state.xlim);
+        clippedDomain = clipDomain(domain, chart.$runtime!.state.xlim);
         break;
       }
       case 'y': {
-        const func = getFunction(this.ink, eqn, ['y']);
+        const func = getFunction(this.$runtime, eqn, ['y']);
         funcXY = (d: number) => [func(d), d] as [number, number];
-        clippedDomain = clipDomain(domain, chart.ink!.state.ylim);
+        clippedDomain = clipDomain(domain, chart.$runtime!.state.ylim);
         break;
       }
       case 't': {
-        const func = getFunction(this.ink, eqn, ['t']);
+        const func = getFunction(this.$runtime, eqn, ['t']);
         funcXY = (d: number) => func(d) as [number, number];
         clippedDomain = domain;
         break;
@@ -94,16 +96,22 @@ class InkChartEqn extends BaseComponent<typeof InkChartEqnSpec> {
     }
     const step = (clippedDomain[1] - clippedDomain[0]) / samples;
     const data = array
-      .range(clippedDomain[0] - step, clippedDomain[1] + step, step)
+      .range(clippedDomain[0], clippedDomain[1], step)
       .map((d) => funcXY(d));
+
+    data.push(funcXY(clippedDomain[1]));
 
     const path = shape.line()
       .defined((d) => Number.isFinite(d[0]) && Number.isFinite(d[1]))
       .x((d) => chart.x(d[0]))
       .y((d) => chart.y(d[1]))(data);
 
-    return svg`<path class="line" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}" d="${path}"></path>`;
+
+    // wrap the function handler, as it is called from the ink-chart context
+    function wrapper(node: ChartEqn, enter: boolean) { return () => node.$runtime?.dispatchEvent('hover', [enter]); }
+
+    return svg`<path class="line" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}" d="${path}" @mouseenter=${wrapper(this, true)} @mouseleave=${wrapper(this, false)}></path>`;
   }
 }
 
-export default InkChartEqn;
+export default ChartEqn;

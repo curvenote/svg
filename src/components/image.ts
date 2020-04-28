@@ -1,10 +1,10 @@
-import { BaseComponent, withInk, svg } from '@iooxa/ink-basic';
+import { BaseComponent, withRuntime, svg } from '@iooxa/components';
 import { types } from '@iooxa/runtime';
-import InkChart from './chart';
+import Chart from './chart';
 
-export const InkChartImageSpec = {
-  name: 'chart-image',
-  description: 'Chart',
+export const SvgImageSpec = {
+  name: 'svg-image',
+  description: 'Image',
   properties: {
     visible: { type: types.PropTypes.boolean, default: true },
     x: { type: types.PropTypes.number, default: 0 },
@@ -18,17 +18,17 @@ export const InkChartImageSpec = {
 
 const litProps = {};
 
-@withInk(InkChartImageSpec, litProps)
-class InkChartImage extends BaseComponent<typeof InkChartImageSpec> {
-  #chart?: InkChart;
+@withRuntime(SvgImageSpec, litProps)
+class SvgImage extends BaseComponent<typeof SvgImageSpec> {
+  #chart?: Chart;
 
-  requestInkUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
 
-  renderSVG(chart: InkChart) {
+  renderSVG(chart: Chart) {
     this.#chart = chart;
     const {
       visible, x, y, width, height, href,
-    } = this.ink!.state;
+    } = this.$runtime!.state;
     if (!visible) return svg``;
     const widthValue = chart.x(width) - chart.x(0);
     const heightValue = chart.y(0) - chart.y(height);
@@ -38,4 +38,4 @@ class InkChartImage extends BaseComponent<typeof InkChartImageSpec> {
   }
 }
 
-export default InkChartImage;
+export default SvgImage;

@@ -1,11 +1,11 @@
-import { BaseComponent, withInk, svg } from '@iooxa/ink-basic';
 import { types } from '@iooxa/runtime';
-import InkChart from './chart';
+import { BaseComponent, withRuntime, svg } from '@iooxa/components';
+import Chart from './chart';
 import { nextColor } from './utils';
 
-export const InkChartCircleSpec = {
-  name: 'chart-circle',
-  description: 'Chart circle',
+export const SvgCircleSpec = {
+  name: 'svg-circle',
+  description: 'SVG circle',
   properties: {
     visible: { type: types.PropTypes.boolean, default: true },
     x: { type: types.PropTypes.number, default: 0.5 },
@@ -13,17 +13,17 @@ export const InkChartCircleSpec = {
     r: { type: types.PropTypes.number, default: 4.5 },
     fill: { type: types.PropTypes.string, default: 'none' },
     stroke: { type: types.PropTypes.string, default: '' },
-    strokeWidth: { type: types.PropTypes.number, default: 1.5 },
-    strokeDasharray: { type: types.PropTypes.string, default: null },
+    strokeWidth: { type: types.PropTypes.number, default: 1.5, attribute: 'stroke-width' },
+    strokeDasharray: { type: types.PropTypes.string, default: null, attribute: 'stroke-dasharray' },
   },
   events: {},
 };
 
 const litProps = {};
 
-@withInk(InkChartCircleSpec, litProps)
-class InkChartCircle extends BaseComponent<typeof InkChartCircleSpec> {
-  #chart?: InkChart;
+@withRuntime(SvgCircleSpec, litProps)
+class SvgCircle extends BaseComponent<typeof SvgCircleSpec> {
+  #chart?: Chart;
 
   constructor() {
     super();
@@ -31,16 +31,16 @@ class InkChartCircle extends BaseComponent<typeof InkChartCircleSpec> {
     this.setAttribute('fill', nextColor());
   }
 
-  requestInkUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
 
-  renderSVG(chart: InkChart) {
+  renderSVG(chart: Chart) {
     this.#chart = chart;
     const {
       visible, r, fill, x, y, stroke, strokeWidth, strokeDasharray,
-    } = this.ink!.state;
+    } = this.$runtime!.state;
     if (!visible) return svg``;
     return svg`<circle r="${r}" fill="${fill}" cx="${chart.x(x)}" cy="${chart.y(y)}" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}"></circle>`;
   }
 }
 
-export default InkChartCircle;
+export default SvgCircle;

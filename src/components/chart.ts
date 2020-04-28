@@ -1,22 +1,21 @@
 import {
-  BaseComponent, withInk, html, svg, PropertyValues,
-} from '@iooxa/ink-basic';
+  BaseComponent, withRuntime, html, svg, css, PropertyValues,
+} from '@iooxa/components';
 import { types } from '@iooxa/runtime';
-import { css } from 'lit-element';
 import * as scale from 'd3-scale';
 import * as Selection from 'd3-selection';
 import * as d3axis from 'd3-axis';
 import { Margin } from './types';
 
 
-export const InkChartSpec = {
-  name: 'chart',
+export const SvgChartSpec = {
+  name: 'svg-chart',
   description: 'Chart',
   properties: {
     xlabel: { type: types.PropTypes.string, default: 'x' },
     ylabel: { type: types.PropTypes.string, default: 'y' },
-    xAxisLocation: { type: types.PropTypes.string, default: 'bottom' },
-    yAxisLocation: { type: types.PropTypes.string, default: 'left' },
+    xAxisLocation: { type: types.PropTypes.string, default: 'bottom', attribute: 'x-axis-location' },
+    yAxisLocation: { type: types.PropTypes.string, default: 'left', attribute: 'y-axis-location' },
     labeled: { type: types.PropTypes.boolean, default: false },
     xlim: { type: types.PropTypes.array, default: [0, 1] },
     ylim: { type: types.PropTypes.array, default: [0, 1] },
@@ -31,8 +30,8 @@ const litProps = {
 };
 
 
-@withInk(InkChartSpec, litProps)
-class InkChart extends BaseComponent<typeof InkChartSpec> {
+@withRuntime(SvgChartSpec, litProps)
+class SvgChart extends BaseComponent<typeof SvgChartSpec> {
   width = 700;
 
   height = 400;
@@ -62,7 +61,7 @@ class InkChart extends BaseComponent<typeof InkChartSpec> {
   y: scale.ScaleLinear<number, number> = scale.scaleLinear();
 
   updateDomainAndRange(margin: Required<Margin>) {
-    const { xlim, ylim } = this.ink!.state;
+    const { xlim, ylim } = this.$runtime!.state;
 
     this.x = scale.scaleLinear()
       .range([0, margin.width])
@@ -74,7 +73,7 @@ class InkChart extends BaseComponent<typeof InkChartSpec> {
   }
 
   renderXAxis(margin: Margin) {
-    const { xAxisLocation, xlabel } = this.ink!.state;
+    const { xAxisLocation, xlabel } = this.$runtime!.state;
 
     if (xAxisLocation === 'hidden') {
       return;
@@ -101,7 +100,7 @@ class InkChart extends BaseComponent<typeof InkChartSpec> {
   }
 
   renderYAxis(margin: Margin) {
-    const { yAxisLocation, ylabel } = this.ink!.state;
+    const { yAxisLocation, ylabel } = this.$runtime!.state;
     if (yAxisLocation === 'hidden') {
       return;
     }
@@ -188,4 +187,4 @@ class InkChart extends BaseComponent<typeof InkChartSpec> {
   }
 }
 
-export default InkChart;
+export default SvgChart;

@@ -1,9 +1,9 @@
 {
-  "name": "@iooxa/ink-chart",
-  "version": "0.0.2",
+  "name": "@iooxa/svg",
+  "version": "0.0.3",
   "description": "Scientific web components for interactive scientific writing, reactive documents and explorable explanations.",
   "main": "dist/index.js",
-  "unpkg": "dist/ink.min.js",
+  "unpkg": "dist/iooxa.min.js",
   "types": "dist/index.d.ts",
   "keywords": [
     "explorable explanations",
@@ -19,14 +19,14 @@
     "test": "jest",
     "lint": "eslint src/**.ts -c .eslintrc.json",
     "clean": "rm -rf dist",
-    "link": "npm link; npm link @iooxa/runtime; npm link @iooxa/ink-basic",
+    "link": "npm link; npm link @iooxa/runtime; npm link @iooxa/components",
     "start": "webpack-dev-server --open --config webpack.dev.js",
     "build-dev": "webpack --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js; tsc; cp src/index.css dist/ink.css; rm -rf dist/src"
+    "build": "webpack --config webpack.prod.js; tsc; cp src/index.css dist/iooxa.css; rm -rf dist/src"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/iooxa/ink-chart.git"
+    "url": "https://github.com/iooxa/svg.git"
   },
   "devDependencies": {
     "@types/d3-array": "^2.0.0",
@@ -38,7 +38,6 @@
     "@types/d3-selection": "^1.4.1",
     "@types/d3-shape": "^1.3.2",
     "@types/jest": "^25.1.4",
-    "@types/underscore": "^1.9.4",
     "@types/uuid": "^7.0.2",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "clean-webpack-plugin": "^3.0.0",
@@ -62,8 +61,8 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "@iooxa/ink-basic": "^0.2.3",
-    "@iooxa/runtime": "^0.2.3",
+    "@iooxa/components": "^0.2.4",
+    "@iooxa/runtime": "^0.2.4",
     "d3-array": "^2.4.0",
     "d3-axis": "^1.0.12",
     "d3-drag": "^1.2.5",
@@ -76,12 +75,11 @@
     "lit-html": "^1.2.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "underscore": "^1.10.2",
     "uuid": "^7.0.3"
   },
   "bugs": {
-    "url": "https://github.com/iooxa/ink-chart/issues"
+    "url": "https://github.com/iooxa/svg/issues"
   },
-  "homepage": "https://components.ink",
+  "homepage": "https://iooxa.dev/svg",
   "sideEffects": false
 }

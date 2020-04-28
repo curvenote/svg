@@ -1,4 +1,5 @@
-import * as components from './components';
+import components, { register } from './components';
 
-export * from './components';
+export { register };
+
 export default components;

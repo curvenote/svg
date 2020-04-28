@@ -1,40 +1,28 @@
-import { actions, provider } from '@iooxa/runtime';
-import InkChart from './chart';
-import InkChartText from './text';
-import InkChartPath from './path';
-import InkChartEqn from './equation';
-import InkChartCircle from './circle';
-import InkChartNode from './node';
-import InkChartImage from './image';
-
-
-function registerComponent(name: string, component: any) {
-  if (component.spec) {
-    provider.dispatch(actions.createSpec(
-      component.spec!.name,
-      component.spec!.properties,
-      component.spec!.events,
-    ));
-  }
-  customElements.define(name, component);
-}
+import { registerComponent } from '@iooxa/components';
+import Chart from './chart';
+import Text from './text';
+import Path from './path';
+import Eqn from './equation';
+import Circle from './circle';
+import Node from './node';
+import Image from './image';
 
 export const register = () => {
-  registerComponent('ink-chart', InkChart);
-  registerComponent('ink-chart-text', InkChartText);
-  registerComponent('ink-chart-path', InkChartPath);
-  registerComponent('ink-chart-eqn', InkChartEqn);
-  registerComponent('ink-chart-circle', InkChartCircle);
-  registerComponent('ink-chart-image', InkChartImage);
-  registerComponent('ink-chart-node', InkChartNode);
+  registerComponent('r-svg-chart', Chart);
+  registerComponent('r-svg-text', Text);
+  registerComponent('r-svg-path', Path);
+  registerComponent('r-svg-eqn', Eqn);
+  registerComponent('r-svg-circle', Circle);
+  registerComponent('r-svg-image', Image);
+  registerComponent('r-svg-node', Node);
 };
 
-export {
-  InkChart,
-  InkChartText,
-  InkChartPath,
-  InkChartEqn,
-  InkChartCircle,
-  InkChartImage,
-  InkChartNode,
+export default {
+  Chart,
+  Text,
+  Path,
+  Eqn,
+  Circle,
+  Image,
+  Node,
 };
