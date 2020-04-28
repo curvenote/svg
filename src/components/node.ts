@@ -52,7 +52,7 @@ class SvgNode extends BaseComponent<typeof SvgNodeSpec> {
     } = this.$runtime!.state;
     if (!visible) return svg``;
 
-    // wrap the function handler, as it is called from the ink-chart context
+    // wrap the function handler, as it is called from the r-svg-chart context
     function wrapper(node: SvgNode) { return (e: Event) => node.setupDrag(e); }
 
     const constrainFunc = this.$runtime!.component?.properties.constrain.func ?? '';
@@ -63,8 +63,8 @@ class SvgNode extends BaseComponent<typeof SvgNodeSpec> {
 
   private setupDrag(event: Event) {
     // Lazy setup the drag events; this is only called once
-    const rawNode = event.target as Element & {inkDrag: boolean};
-    if (rawNode.inkDrag) return;
+    const rawNode = event.target as Element & {hasDragHandler: boolean};
+    if (rawNode.hasDragHandler) return;
 
     const bodyClassList = document.getElementsByTagName('BODY')[0].classList;
     const node = Selection.select(rawNode as Element);
@@ -89,7 +89,7 @@ class SvgNode extends BaseComponent<typeof SvgNodeSpec> {
     });
     node.call(drag);
     // Remember to mark the rawNode
-    rawNode.inkDrag = true;
+    rawNode.hasDragHandler = true;
   }
 }
 

@@ -60,7 +60,7 @@ class SvgPath extends BaseComponent<typeof SvgPathSpec> {
         break;
     }
 
-    // wrap the function handler, as it is called from the ink-chart context
+    // wrap the function handler, as it is called from the r-svg-chart context
     function wrapper(node: SvgPath, enter: boolean) { return () => node.$runtime?.dispatchEvent('hover', [enter]); }
 
     return svg`<path class="line" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}" d="${path(data as [number, number][])}" @mouseenter=${wrapper(this, true)} @mouseleave=${wrapper(this, false)}></path>`;

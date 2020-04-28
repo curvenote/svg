@@ -33,9 +33,9 @@ const litProps = {};
 type EqnFunc = ((d: number) => number) | ((d: number) => [number, number]);
 
 function getFunction(
-  ink: types.ComponentShortcut<any> | null, eqn: string, args: string[],
+  $runtime: types.ComponentShortcut<any> | null, eqn: string, args: string[],
 ): EqnFunc {
-  const scopeName = ink!.scope ?? DEFAULT_SCOPE;
+  const scopeName = $runtime!.scope ?? DEFAULT_SCOPE;
   const executionState = selectors.getExecutionState(provider.getState());
   const func = actions.getEvaluationFunction(scopeName, eqn, executionState, args);
   return func(executionState, scopeName) as EqnFunc;
@@ -107,7 +107,7 @@ class ChartEqn extends BaseComponent<typeof ChartEqnSpec> {
       .y((d) => chart.y(d[1]))(data);
 
 
-    // wrap the function handler, as it is called from the ink-chart context
+    // wrap the function handler, as it is called from the r-svg-chart context
     function wrapper(node: ChartEqn, enter: boolean) { return () => node.$runtime?.dispatchEvent('hover', [enter]); }
 
     return svg`<path class="line" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}" d="${path}" @mouseenter=${wrapper(this, true)} @mouseleave=${wrapper(this, false)}></path>`;
