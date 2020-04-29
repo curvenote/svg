@@ -190,6 +190,9 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
 
   static get styles() {
     return css`
+      div {
+        text-align: center;
+      }
       svg {
         font: 11px sans-serif;
       }
