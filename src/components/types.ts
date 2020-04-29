@@ -5,4 +5,6 @@ export interface Margin {
   left: number;
   width: number;
   height: number;
+  outerWidth: number;
+  outerHeight: number;
 }

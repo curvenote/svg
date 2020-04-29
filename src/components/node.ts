@@ -52,19 +52,20 @@ class SvgNode extends BaseComponent<typeof SvgNodeSpec> {
     } = this.$runtime!.state;
     if (!visible) return svg``;
 
-    // wrap the function handler, as it is called from the r-svg-chart context
-    function wrapper(node: SvgNode) { return (e: Event) => node.setupDrag(e); }
-
     const constrainFunc = this.$runtime!.component?.properties.constrain.func ?? '';
     const [xVal, yVal] = (constrainFunc !== '' ? constrain : [x, y]) as number[];
 
-    return svg`<circle class="drag" r="${r}" fill="${fill}" cx="${chart.x(xVal)}" cy="${chart.y(yVal)}" @mouseover=${wrapper(this)} stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}"></circle>`;
+    return svg`
+    <circle r="${r}" fill="${fill}" cx="${chart.x(xVal)}" cy="${chart.y(yVal)}" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}"></circle>
+    <circle id=${this.$runtime!.id} class="drag" r="20" fill="#aaaaaa33" cx="${chart.x(xVal)}" cy="${chart.y(yVal)}"></circle>`;
   }
 
-  private setupDrag(event: Event) {
+  callback(chart: Chart) {
     // Lazy setup the drag events; this is only called once
-    const rawNode = event.target as Element & {hasDragHandler: boolean};
-    if (rawNode.hasDragHandler) return;
+    const rawNode = chart.shadowRoot
+      ?.getElementById(this.$runtime!.id) as (HTMLElement & {hasDragHandler: boolean}) | null;
+
+    if (rawNode == null || rawNode.hasDragHandler) return;
 
     const bodyClassList = document.getElementsByTagName('BODY')[0].classList;
     const node = Selection.select(rawNode as Element);
@@ -75,15 +76,17 @@ class SvgNode extends BaseComponent<typeof SvgNodeSpec> {
     );
 
     const drag = Drag.drag().on('start', () => {
-      Selection.event.sourceEvent.preventDefault();
       bodyClassList.add(CURSOR_MOVE_CLASS);
       this.$runtime?.dispatchEvent('dragging', [true]);
+      // This prevents scrolling, by hiding the overflow
+      // Important on touch:
+      document.documentElement.style.overflow = 'hidden';
     }).on('drag', () => {
-      Selection.event.sourceEvent.preventDefault();
       const x = this.#chart!.x.invert(Selection.event.x);
       const y = this.#chart!.y.invert(Selection.event.y);
       throttled(x, y);
     }).on('end', () => {
+      document.documentElement.style.overflow = '';
       bodyClassList.remove(CURSOR_MOVE_CLASS);
       this.$runtime?.dispatchEvent('dragging', [false]);
     });

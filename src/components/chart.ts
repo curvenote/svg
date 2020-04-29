@@ -1,5 +1,5 @@
 import {
-  BaseComponent, withRuntime, html, svg, css, PropertyValues,
+  BaseComponent, withRuntime, html, svg, css, PropertyValues, throttle, THROTTLE_SKIP,
 } from '@iooxa/components';
 import { types } from '@iooxa/runtime';
 import * as scale from 'd3-scale';
@@ -41,18 +41,38 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
   firstUpdated(changed: PropertyValues) {
     super.firstUpdated(changed);
     this.#initialized = true;
+    // Now setup the children
     setTimeout(() => this.requestUpdate(), 100);
+    // Now setup the event handlers
+    setTimeout(() => this.attachCallbacks(), 200);
+
+    // Add a resize handler
+    window.addEventListener('resize', throttle(() => {
+      this.requestUpdate();
+    }, THROTTLE_SKIP));
+  }
+
+  private get dimensions(): { outerWidth: number, outerHeight: number} {
+    if (this.#initialized) {
+      const { offsetWidth } = this.shadowRoot?.children[0] as HTMLDivElement;
+      const aspect = this.width / this.height;
+      const outerWidth = Math.min(this.width, offsetWidth);
+      const outerHeight = outerWidth / aspect;
+      return { outerWidth, outerHeight };
+    }
+    return { outerWidth: this.width, outerHeight: this.height };
   }
 
   get margin(): Margin {
+    const { outerWidth, outerHeight } = this.dimensions;
     const top = 20;
     const right = 20;
     const bottom = 40;
     const left = 50;
-    const width = this.width - left - right;
-    const height = this.height - top - bottom;
+    const width = outerWidth - left - right;
+    const height = outerHeight - top - bottom;
     return {
-      top, right, bottom, left, width, height,
+      top, right, bottom, left, width, height, outerWidth, outerHeight,
     };
   }
 
@@ -127,6 +147,13 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     }
   }
 
+  attachCallbacks() {
+    Array.from(this.children).forEach((child) => {
+      const chartObj = child as Element & { callback: (chart: Element) => void };
+      chartObj.callback?.(this);
+    });
+  }
+
   render() {
     const { margin } = this;
 
@@ -134,6 +161,7 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
       this.updateDomainAndRange(margin);
       this.renderXAxis(margin);
       this.renderYAxis(margin);
+      requestAnimationFrame(() => this.attachCallbacks());
     }
 
     const children = Array.from(this.children).map((child) => {
@@ -146,7 +174,7 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
 
     return html`
       <div>
-        <svg width="${this.width}" height="${this.height}">
+        <svg width="${margin.outerWidth}" height="${margin.outerHeight}">
           <g transform="translate(${margin.left},${margin.top})">
             <clipPath id="clip"><rect id="clip-rect" x="0" y="0" width="${margin.width}" height="${margin.height}"></rect></clipPath>
             <g class="x axis"></g>
