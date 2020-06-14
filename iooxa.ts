@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import runtime, { types, setup } from '@iooxa/runtime';
+import runtime, { types } from '@iooxa/runtime';
 import { register as basicRegister } from '@iooxa/components';
 import '@iooxa/components/dist/iooxa.css';
 import { register } from './src/components';
@@ -27,6 +27,5 @@ window.iooxa = {
   ) as types.Store,
 };
 
-setup(window.iooxa.store);
-basicRegister();
-register();
+basicRegister(window.iooxa.store);
+register(window.iooxa.store);
