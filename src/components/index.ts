@@ -8,7 +8,6 @@ import Circle from './circle';
 import Node from './node';
 import Image from './image';
 
-
 export const register = (store: types.Store) => {
   setup(store);
   registerComponent('r-svg-chart', Chart);

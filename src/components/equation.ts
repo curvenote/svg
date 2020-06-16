@@ -41,7 +41,6 @@ function getFunction(
   return func(executionState, scopeName) as EqnFunc;
 }
 
-
 function clipDomain(domain: number[], clip: number[]) {
   const low = Math.min(...clip);
   const high = Math.max(...clip);
@@ -105,7 +104,6 @@ class ChartEqn extends BaseComponent<typeof ChartEqnSpec> {
       .defined((d) => Number.isFinite(d[0]) && Number.isFinite(d[1]))
       .x((d) => chart.x(d[0]))
       .y((d) => chart.y(d[1]))(data);
-
 
     // wrap the function handler, as it is called from the r-svg-chart context
     function wrapper(node: ChartEqn, enter: boolean) { return () => node.$runtime?.dispatchEvent('hover', [enter]); }

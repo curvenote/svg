@@ -7,7 +7,6 @@ import * as Selection from 'd3-selection';
 import * as d3axis from 'd3-axis';
 import { Margin } from './types';
 
-
 export const SvgChartSpec = {
   name: 'svg-chart',
   description: 'Chart',
@@ -23,12 +22,10 @@ export const SvgChartSpec = {
   events: {},
 };
 
-
 const litProps = {
   width: { type: Number, reflect: false },
   height: { type: Number, reflect: false },
 };
-
 
 @withRuntime(SvgChartSpec, litProps)
 class SvgChart extends BaseComponent<typeof SvgChartSpec> {
