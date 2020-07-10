@@ -1,6 +1,6 @@
 {
   "name": "@iooxa/svg",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Scientific web components for interactive scientific writing, reactive documents and explorable explanations.",
   "main": "dist/index.js",
   "unpkg": "dist/iooxa.min.js",
@@ -61,8 +61,8 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "@iooxa/components": "^0.2.4",
-    "@iooxa/runtime": "^0.2.4",
+    "@iooxa/components": "^0.2.5",
+    "@iooxa/runtime": "^0.2.5",
     "d3-array": "^2.4.0",
     "d3-axis": "^1.0.12",
     "d3-drag": "^1.2.5",
