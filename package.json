@@ -25,7 +25,8 @@
     "link": "yarn unlink; yarn link; yarn link @iooxa/runtime; yarn link @iooxa/components",
     "start": "webpack serve --config webpack.dev.js",
     "build-dev": "webpack --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js; tsc; cp src/index.css dist/iooxa.css; rm -rf dist/src"
+    "build": "webpack --config webpack.prod.js; tsc; cp src/index.css dist/iooxa.css; rm -rf dist/src",
+    "prepublishOnly": "yarn run clean; yarn run build;"
   },
   "repository": {
     "type": "git",
