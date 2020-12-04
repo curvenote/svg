@@ -81,9 +81,9 @@ class SvgNode extends BaseComponent<typeof SvgNodeSpec> {
       // This prevents scrolling, by hiding the overflow
       // Important on touch:
       document.documentElement.style.overflow = 'hidden';
-    }).on('drag', () => {
-      const x = this.#chart!.x.invert(Selection.event.x);
-      const y = this.#chart!.y.invert(Selection.event.y);
+    }).on('drag', (event) => {
+      const x = this.#chart!.x.invert(event.x);
+      const y = this.#chart!.y.invert(event.y);
       throttled(x, y);
     }).on('end', () => {
       document.documentElement.style.overflow = '';
