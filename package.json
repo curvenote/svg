@@ -1,6 +1,6 @@
 {
   "name": "@iooxa/svg",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Scientific web components for interactive scientific writing, reactive documents and explorable explanations.",
   "main": "dist/index.js",
   "unpkg": "dist/iooxa.min.js",
@@ -15,6 +15,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
