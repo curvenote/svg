@@ -1,7 +1,7 @@
-import { BaseComponent, withRuntime, svg } from '@iooxa/components';
+import { BaseComponent, withRuntime, svg } from '@curvenote/components';
 import {
   types, actions, provider, selectors, DEFAULT_SCOPE,
-} from '@iooxa/runtime';
+} from '@curvenote/runtime';
 import * as shape from 'd3-shape';
 import * as array from 'd3-array';
 import Chart from './chart';

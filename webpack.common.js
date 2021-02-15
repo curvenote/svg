@@ -8,17 +8,17 @@ module.exports = {
     usedExports: true,
   },
   entry: {
-    app: './iooxa.ts',
+    app: './curvenote.ts',
   },
   plugins: [
     // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'Ink Components',
+      title: '@curvenote/svg',
       template: 'index.html',
     }),
   ],
   output: {
-    filename: 'iooxa.min.js',
+    filename: 'curvenote.min.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {

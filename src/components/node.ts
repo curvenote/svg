@@ -1,7 +1,7 @@
 import {
   BaseComponent, withRuntime, svg, throttle, THROTTLE_SKIP,
-} from '@iooxa/components';
-import { types } from '@iooxa/runtime';
+} from '@curvenote/components';
+import { types } from '@curvenote/runtime';
 import * as Selection from 'd3-selection';
 import * as Drag from 'd3-drag';
 import Chart from './chart';

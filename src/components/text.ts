@@ -1,5 +1,5 @@
-import { BaseComponent, withRuntime, svg } from '@iooxa/components';
-import { types } from '@iooxa/runtime';
+import { BaseComponent, withRuntime, svg } from '@curvenote/components';
+import { types } from '@curvenote/runtime';
 import Chart from './chart';
 
 export const SvgTextSpec = {

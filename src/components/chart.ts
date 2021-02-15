@@ -1,7 +1,7 @@
 import {
   BaseComponent, withRuntime, html, svg, css, PropertyValues, throttle, THROTTLE_SKIP,
-} from '@iooxa/components';
-import { types } from '@iooxa/runtime';
+} from '@curvenote/components';
+import { types } from '@curvenote/runtime';
 import * as scale from 'd3-scale';
 import * as Selection from 'd3-selection';
 import * as d3axis from 'd3-axis';

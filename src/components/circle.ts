@@ -1,5 +1,5 @@
-import { types } from '@iooxa/runtime';
-import { BaseComponent, withRuntime, svg } from '@iooxa/components';
+import { types } from '@curvenote/runtime';
+import { BaseComponent, withRuntime, svg } from '@curvenote/components';
 import Chart from './chart';
 import { nextColor } from './utils';
 

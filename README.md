@@ -1,12 +1,12 @@
-<p align="center"><a href="https://iooxa.dev"><img src="https://iooxa.dev/images/logo.png" alt="iooxa.dev" width="150"></a></p>
+<p align="center"><a href="https://curvenote.dev"><img src="https://curvenote.dev/images/logo.png" alt="curvenote.dev" width="150"></a></p>
 
-# @iooxa/svg
+# @curvenote/svg
 
-[![Ink-Basic on npm](https://img.shields.io/npm/v/@iooxa/svg.svg)](https://www.npmjs.com/package/@iooxa/svg)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/iooxa/svg/blob/master/LICENSE)
-[![Documentation](https://img.shields.io/badge/iooxa.dev-Docs-green)](https://iooxa.dev)
+[![Ink-Basic on npm](https://img.shields.io/npm/v/@curvenote/svg.svg)](https://www.npmjs.com/package/@curvenote/svg)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/svg/blob/master/LICENSE)
+[![Documentation](https://img.shields.io/badge/curvenote.dev-Docs-green)](https://curvenote.dev)
 
-The goal of `@iooxa/svg` is to provide web-components for interactive scientific writing, reactive documents and [explorable explanations](https://explorabl.es). This library provides basic charting and diagram capabilities through basic, reactive SVG graphics.
+The goal of `@curvenote/svg` is to provide web-components for interactive scientific writing, reactive documents and [explorable explanations](https://explorabl.es). This library provides basic charting and diagram capabilities through basic, reactive SVG graphics.
 
 ![Radius](images/radius.gif)
 
@@ -24,30 +24,30 @@ The goal of `@iooxa/svg` is to provide web-components for interactive scientific
 
 ## Getting Started
 
-`@iooxa/svg` is based on web-components, which creates custom HTML tags so that they can make writing documents easier.
+`@curvenote/svg` is based on web-components, which creates custom HTML tags so that they can make writing documents easier.
 To get started, copy the built javascript file to the head of your page:
 
 ```html
-<script src="https://unpkg.com/@iooxa/svg"></script>
+<script src="https://unpkg.com/@curvenote/svg"></script>
 ```
 
-You can also download the [latest release](https://github.com/iooxa/svg/releases) from GitHub. If you are running this without a web server, ensure the script has `charset="utf-8"` in the script tag. You can also [install from npm](https://www.npmjs.com/package/@iooxa/svg):
+You can also download the [latest release](https://github.com/curvenote/svg/releases) from GitHub. If you are running this without a web server, ensure the script has `charset="utf-8"` in the script tag. You can also [install from npm](https://www.npmjs.com/package/@curvenote/svg):
 
 ```bash
->> npm install @iooxa/svg
+>> npm install @curvenote/svg
 ```
 
 You should then be able to extend the package as you see fit:
 
 ```javascript
-import components from '@iooxa/svg';
+import components from '@curvenote/svg';
 ```
 
-Note that the npm module does not setup the [@iooxa/runtime](https://github.com/iooxa/runtime) store, nor does it register the components. See the [iooxa.ts](/iooxa.ts) file for what the built package does to `setup` the store and `register` the components.
+Note that the npm module does not setup the [@curvenote/runtime](https://github.com/curvenote/runtime) store, nor does it register the components. See the [curvenote.ts](/curvenote.ts) file for what the built package does to `setup` the store and `register` the components.
 
 ## Documentation
 
-See https://iooxa.dev for full documentation.
+See https://curvenote.dev for full documentation.
 
 ## Basic Components
 

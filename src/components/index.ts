@@ -1,5 +1,5 @@
-import { types, setup } from '@iooxa/runtime';
-import { registerComponent } from '@iooxa/components';
+import { types, setup } from '@curvenote/runtime';
+import { registerComponent } from '@curvenote/components';
 import Chart from './chart';
 import Text from './text';
 import Path from './path';

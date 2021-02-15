@@ -1,9 +1,9 @@
 {
-  "name": "@iooxa/svg",
+  "name": "@curvenote/svg",
   "version": "0.0.6",
   "description": "Scientific web components for interactive scientific writing, reactive documents and explorable explanations.",
   "main": "dist/index.js",
-  "unpkg": "dist/iooxa.min.js",
+  "unpkg": "dist/curvenote.min.js",
   "types": "dist/index.d.ts",
   "keywords": [
     "explorable explanations",
@@ -15,6 +15,14 @@
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/curvenote/svg.git"
+  },
+  "bugs": {
+    "url": "https://github.com/curvenote/svg/issues"
+  },
+  "homepage": "https://curvenote.dev/svg",
   "files": [
     "dist"
   ],
@@ -22,52 +30,48 @@
     "test": "jest",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
     "clean": "rm -rf dist",
-    "link": "yarn unlink; yarn link; yarn link @iooxa/runtime; yarn link @iooxa/components",
+    "link": "yarn unlink; yarn link; yarn link @curvenote/runtime; yarn link @curvenote/components",
     "start": "webpack serve --config webpack.dev.js",
     "build-dev": "webpack --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js; tsc; cp src/index.css dist/iooxa.css; rm -rf dist/src",
+    "build": "webpack --config webpack.prod.js; tsc; cp src/index.css dist/curvenote.css; rm -rf dist/src",
     "prepublishOnly": "yarn run clean; yarn run build;"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/iooxa/svg.git"
-  },
   "devDependencies": {
-    "@types/d3-array": "^2.8.0",
+    "@types/d3-array": "^2.9.0",
     "@types/d3-axis": "^2.0.0",
     "@types/d3-drag": "^2.0.0",
     "@types/d3-format": "^2.0.0",
-    "@types/d3-scale": "^3.2.1",
+    "@types/d3-scale": "^3.2.2",
     "@types/d3-scale-chromatic": "^2.0.0",
     "@types/d3-selection": "^2.0.0",
     "@types/d3-shape": "^2.0.0",
-    "@types/jest": "^26.0.16",
+    "@types/jest": "^26.0.20",
     "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
     "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^5.0.1",
-    "eslint": "^7.14.0",
-    "eslint-config-airbnb-typescript": "^12.0.0",
+    "css-loader": "^5.0.2",
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^24.1.3",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "express": "^4.17.1",
-    "html-webpack-plugin": "^4.5.0",
+    "html-webpack-plugin": "^5.1.0",
     "jest": "^26.6.3",
     "style-loader": "^2.0.0",
-    "ts-loader": "^8.0.11",
-    "typescript": "^4.1.2",
-    "webpack": "^5.9.0",
-    "webpack-cli": "^4.2.0",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^5.4.0"
+    "ts-loader": "^8.0.17",
+    "typescript": "^4.1.5",
+    "webpack": "^5.22.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
   },
   "dependencies": {
-    "@iooxa/components": "^0.2.7",
-    "@iooxa/runtime": "^0.2.7",
-    "d3-array": "^2.9.0",
+    "@curvenote/components": "^0.2.8",
+    "@curvenote/runtime": "^0.2.7",
+    "d3-array": "^2.11.0",
     "d3-axis": "^2.0.0",
     "d3-drag": "^2.0.0",
     "d3-format": "^2.0.0",
@@ -79,11 +83,7 @@
     "lit-html": "^1.3.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.2"
   },
-  "bugs": {
-    "url": "https://github.com/iooxa/svg/issues"
-  },
-  "homepage": "https://iooxa.dev/svg",
   "sideEffects": false
 }
