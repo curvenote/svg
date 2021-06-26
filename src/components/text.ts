@@ -24,13 +24,13 @@ const litProps = {};
 class SvgText extends BaseComponent<typeof SvgTextSpec> {
   #chart?: Chart;
 
-  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() {
+    this.#chart?.requestUpdate();
+  }
 
   renderSVG(chart: Chart) {
     this.#chart = chart;
-    const {
-      visible, x, y, text, rotate, textAnchor, fontSize, fill,
-    } = this.$runtime!.state;
+    const { visible, x, y, text, rotate, textAnchor, fontSize, fill } = this.$runtime!.state;
     if (!visible) return svg``;
     const xValue = chart.x(x);
     const yValue = chart.y(y);

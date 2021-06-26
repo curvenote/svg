@@ -1,7 +1,5 @@
 import { BaseComponent, withRuntime, svg } from '@curvenote/components';
-import {
-  types, actions, provider, selectors, DEFAULT_SCOPE,
-} from '@curvenote/runtime';
+import { types, actions, provider, selectors, DEFAULT_SCOPE } from '@curvenote/runtime';
 import * as shape from 'd3-shape';
 import * as array from 'd3-array';
 import Chart from './chart';
@@ -33,7 +31,9 @@ const litProps = {};
 type EqnFunc = ((d: number) => number) | ((d: number) => [number, number]);
 
 function getFunction(
-  $runtime: types.ComponentShortcut<any> | null, eqn: string, args: string[],
+  $runtime: types.ComponentShortcut<any> | null,
+  eqn: string,
+  args: string[],
 ): EqnFunc {
   const scopeName = $runtime!.scope ?? DEFAULT_SCOPE;
   const executionState = selectors.getExecutionState(provider.getState());
@@ -60,17 +60,18 @@ class ChartEqn extends BaseComponent<typeof ChartEqnSpec> {
     this.setAttribute('stroke', nextColor());
   }
 
-  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() {
+    this.#chart?.requestUpdate();
+  }
 
   renderSVG(chart: Chart) {
     this.#chart = chart;
-    const {
-      visible, eqn, samples, domain, stroke, strokeWidth, strokeDasharray, parameterize,
-    } = this.$runtime!.state;
+    const { visible, eqn, samples, domain, stroke, strokeWidth, strokeDasharray, parameterize } =
+      this.$runtime!.state;
     if (!visible) return svg``;
 
     let clippedDomain: number[];
-    let funcXY: (d: number)=> [number, number];
+    let funcXY: (d: number) => [number, number];
     switch (parameterize.toLocaleLowerCase().trim()) {
       case 'x': {
         const func = getFunction(this.$runtime, eqn, ['x']);
@@ -94,21 +95,25 @@ class ChartEqn extends BaseComponent<typeof ChartEqnSpec> {
         throw new Error('parameterize must be "x", "y", or "t"');
     }
     const step = (clippedDomain[1] - clippedDomain[0]) / samples;
-    const data = array
-      .range(clippedDomain[0], clippedDomain[1], step)
-      .map((d) => funcXY(d));
+    const data = array.range(clippedDomain[0], clippedDomain[1], step).map((d) => funcXY(d));
 
     data.push(funcXY(clippedDomain[1]));
 
-    const path = shape.line()
+    const path = shape
+      .line()
       .defined((d) => Number.isFinite(d[0]) && Number.isFinite(d[1]))
       .x((d) => chart.x(d[0]))
       .y((d) => chart.y(d[1]))(data);
 
     // wrap the function handler, as it is called from the r-svg-chart context
-    function wrapper(node: ChartEqn, enter: boolean) { return () => node.$runtime?.dispatchEvent('hover', [enter]); }
+    function wrapper(node: ChartEqn, enter: boolean) {
+      return () => node.$runtime?.dispatchEvent('hover', [enter]);
+    }
 
-    return svg`<path class="line" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}" d="${path}" @mouseenter=${wrapper(this, true)} @mouseleave=${wrapper(this, false)}></path>`;
+    return svg`<path class="line" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}" d="${path}" @mouseenter=${wrapper(
+      this,
+      true,
+    )} @mouseleave=${wrapper(this, false)}></path>`;
   }
 }
 

@@ -1,6 +1,4 @@
-import {
-  BaseComponent, withRuntime, svg, throttle, THROTTLE_SKIP,
-} from '@curvenote/components';
+import { BaseComponent, withRuntime, svg, throttle, THROTTLE_SKIP } from '@curvenote/components';
 import { types } from '@curvenote/runtime';
 import * as Selection from 'd3-selection';
 import * as Drag from 'd3-drag';
@@ -17,7 +15,10 @@ export const SvgNodeSpec = {
     x: { type: types.PropTypes.number, default: 0.5 },
     y: { type: types.PropTypes.number, default: 0.5 },
     constrain: {
-      type: types.PropTypes.array, default: '', has: { func: true, value: false }, args: ['x', 'y'],
+      type: types.PropTypes.array,
+      default: '',
+      has: { func: true, value: false },
+      args: ['x', 'y'],
     },
     r: { type: types.PropTypes.number, default: 5 },
     fill: { type: types.PropTypes.string, default: 'none' },
@@ -43,27 +44,33 @@ class SvgNode extends BaseComponent<typeof SvgNodeSpec> {
     this.setAttribute('fill', nextColor());
   }
 
-  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() {
+    this.#chart?.requestUpdate();
+  }
 
   renderSVG(chart: Chart) {
     this.#chart = chart;
-    const {
-      visible, constrain, r, fill, x, y, stroke, strokeWidth, strokeDasharray,
-    } = this.$runtime!.state;
+    const { visible, constrain, r, fill, x, y, stroke, strokeWidth, strokeDasharray } =
+      this.$runtime!.state;
     if (!visible) return svg``;
 
     const constrainFunc = this.$runtime!.component?.properties.constrain.func ?? '';
     const [xVal, yVal] = (constrainFunc !== '' ? constrain : [x, y]) as number[];
 
     return svg`
-    <circle r="${r}" fill="${fill}" cx="${chart.x(xVal)}" cy="${chart.y(yVal)}" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}"></circle>
-    <circle id=${this.$runtime!.id} class="drag" r="20" fill="#aaaaaa33" cx="${chart.x(xVal)}" cy="${chart.y(yVal)}"></circle>`;
+    <circle r="${r}" fill="${fill}" cx="${chart.x(xVal)}" cy="${chart.y(
+      yVal,
+    )}" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}"></circle>
+    <circle id=${this.$runtime!.id} class="drag" r="20" fill="#aaaaaa33" cx="${chart.x(
+      xVal,
+    )}" cy="${chart.y(yVal)}"></circle>`;
   }
 
   callback(chart: Chart) {
     // Lazy setup the drag events; this is only called once
-    const rawNode = chart.shadowRoot
-      ?.getElementById(this.$runtime!.id) as (HTMLElement & {hasDragHandler: boolean}) | null;
+    const rawNode = chart.shadowRoot?.getElementById(this.$runtime!.id) as
+      | (HTMLElement & { hasDragHandler: boolean })
+      | null;
 
     if (rawNode == null || rawNode.hasDragHandler) return;
 
@@ -75,21 +82,24 @@ class SvgNode extends BaseComponent<typeof SvgNodeSpec> {
       THROTTLE_SKIP / 3,
     );
 
-    const drag = Drag.drag().on('start', () => {
-      bodyClassList.add(CURSOR_MOVE_CLASS);
-      this.$runtime?.dispatchEvent('dragging', [true]);
-      // This prevents scrolling, by hiding the overflow
-      // Important on touch:
-      document.documentElement.style.overflow = 'hidden';
-    }).on('drag', (event) => {
-      const x = this.#chart!.x.invert(event.x);
-      const y = this.#chart!.y.invert(event.y);
-      throttled(x, y);
-    }).on('end', () => {
-      document.documentElement.style.overflow = '';
-      bodyClassList.remove(CURSOR_MOVE_CLASS);
-      this.$runtime?.dispatchEvent('dragging', [false]);
-    });
+    const drag = Drag.drag()
+      .on('start', () => {
+        bodyClassList.add(CURSOR_MOVE_CLASS);
+        this.$runtime?.dispatchEvent('dragging', [true]);
+        // This prevents scrolling, by hiding the overflow
+        // Important on touch:
+        document.documentElement.style.overflow = 'hidden';
+      })
+      .on('drag', (event) => {
+        const x = this.#chart!.x.invert(event.x);
+        const y = this.#chart!.y.invert(event.y);
+        throttled(x, y);
+      })
+      .on('end', () => {
+        document.documentElement.style.overflow = '';
+        bodyClassList.remove(CURSOR_MOVE_CLASS);
+        this.$runtime?.dispatchEvent('dragging', [false]);
+      });
     node.call(drag);
     // Remember to mark the rawNode
     rawNode.hasDragHandler = true;

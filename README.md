@@ -14,10 +14,34 @@ The goal of `@curvenote/svg` is to provide web-components for interactive scient
 <r-var name="a" value="3"></r-var>
 <r-var name="b" value="3"></r-var>
 <r-var name="r" :value="Math.sqrt(a*a + b*b)"></r-var>
-<r-svg-chart xlim="[-5, 5]" ylim="[-5, 5]" height="400" width="400" x-axis-location="origin" y-axis-location="origin" style="text-align: center;">
-  <r-svg-eqn :domain="[0, Math.atan2(b, a)]" eqn="[r * Math.cos(t), r * Math.sin(t)]" parameterize="t" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-eqn>
-  <r-svg-path :data="[[0, 0],[r * Math.cos(Math.atan2(b, a)), r * Math.sin(Math.atan2(b, a))]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-  <r-svg-text :x="(r/2) * Math.cos(Math.atan2(b, a) / 2)" :y="(r/2) * Math.sin(Math.atan2(b, a) / 2)" :text="Math.round(Math.atan2(b, a)*180/Math.PI) + '°'"></r-svg-text>
+<r-svg-chart
+  xlim="[-5, 5]"
+  ylim="[-5, 5]"
+  height="400"
+  width="400"
+  x-axis-location="origin"
+  y-axis-location="origin"
+  style="text-align: center;"
+>
+  <r-svg-eqn
+    :domain="[0, Math.atan2(b, a)]"
+    eqn="[r * Math.cos(t), r * Math.sin(t)]"
+    parameterize="t"
+    stroke="#333"
+    stroke-width="1"
+    stroke-dasharray="3"
+  ></r-svg-eqn>
+  <r-svg-path
+    :data="[[0, 0],[r * Math.cos(Math.atan2(b, a)), r * Math.sin(Math.atan2(b, a))]]"
+    stroke="#333"
+    stroke-width="1"
+    stroke-dasharray="3"
+  ></r-svg-path>
+  <r-svg-text
+    :x="(r/2) * Math.cos(Math.atan2(b, a) / 2)"
+    :y="(r/2) * Math.sin(Math.atan2(b, a) / 2)"
+    :text="Math.round(Math.atan2(b, a)*180/Math.PI) + '°'"
+  ></r-svg-text>
   <r-svg-node :x="a" :y="b" :drag="{a: x, b: y}" fill="#ff7f0e"></r-svg-node>
 </r-svg-chart>
 ```
@@ -51,10 +75,10 @@ See https://curvenote.dev for full documentation.
 
 ## Basic Components
 
-* r-svg-chart
-* r-svg-text
-* r-svg-path
-* r-svg-eqn
-* r-svg-circle
-* r-svg-image
-* r-svg-node
+- r-svg-chart
+- r-svg-text
+- r-svg-path
+- r-svg-eqn
+- r-svg-circle
+- r-svg-image
+- r-svg-node
