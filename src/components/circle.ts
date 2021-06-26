@@ -31,15 +31,17 @@ class SvgCircle extends BaseComponent<typeof SvgCircleSpec> {
     this.setAttribute('fill', nextColor());
   }
 
-  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() {
+    this.#chart?.requestUpdate();
+  }
 
   renderSVG(chart: Chart) {
     this.#chart = chart;
-    const {
-      visible, r, fill, x, y, stroke, strokeWidth, strokeDasharray,
-    } = this.$runtime!.state;
+    const { visible, r, fill, x, y, stroke, strokeWidth, strokeDasharray } = this.$runtime!.state;
     if (!visible) return svg``;
-    return svg`<circle r="${r}" fill="${fill}" cx="${chart.x(x)}" cy="${chart.y(y)}" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}"></circle>`;
+    return svg`<circle r="${r}" fill="${fill}" cx="${chart.x(x)}" cy="${chart.y(
+      y,
+    )}" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}"></circle>`;
   }
 }
 

@@ -27,7 +27,9 @@ const litProps = {};
 class SvgPath extends BaseComponent<typeof SvgPathSpec> {
   #chart?: Chart;
 
-  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() {
+    this.#chart?.requestUpdate();
+  }
 
   constructor() {
     super();
@@ -37,16 +39,16 @@ class SvgPath extends BaseComponent<typeof SvgPathSpec> {
 
   renderSVG(chart: Chart) {
     this.#chart = chart;
-    const {
-      visible, stroke, strokeWidth, strokeDasharray, data, curve, closed,
-    } = this.$runtime!.state;
+    const { visible, stroke, strokeWidth, strokeDasharray, data, curve, closed } =
+      this.$runtime!.state;
     if (!visible) return svg``;
 
-    const path = shape.line()
-      .defined((d: number[]) => (
-        (Number.isFinite(d[0]) && Number.isFinite(d[1]))
-        && !(d[0] == null || d[1] == null)
-      ))
+    const path = shape
+      .line()
+      .defined(
+        (d: number[]) =>
+          Number.isFinite(d[0]) && Number.isFinite(d[1]) && !(d[0] == null || d[1] == null),
+      )
       .x((d: number[]) => chart.x(d[0]))
       .y((d: number[]) => chart.y(d[1]));
     switch (curve) {
@@ -61,9 +63,13 @@ class SvgPath extends BaseComponent<typeof SvgPathSpec> {
     }
 
     // wrap the function handler, as it is called from the r-svg-chart context
-    function wrapper(node: SvgPath, enter: boolean) { return () => node.$runtime?.dispatchEvent('hover', [enter]); }
+    function wrapper(node: SvgPath, enter: boolean) {
+      return () => node.$runtime?.dispatchEvent('hover', [enter]);
+    }
 
-    return svg`<path class="line" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}" d="${path(data as [number, number][])}" @mouseenter=${wrapper(this, true)} @mouseleave=${wrapper(this, false)}></path>`;
+    return svg`<path class="line" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-dasharray="${strokeDasharray}" d="${path(
+      data as [number, number][],
+    )}" @mouseenter=${wrapper(this, true)} @mouseleave=${wrapper(this, false)}></path>`;
   }
 }
 

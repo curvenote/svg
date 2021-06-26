@@ -22,13 +22,13 @@ const litProps = {};
 class SvgImage extends BaseComponent<typeof SvgImageSpec> {
   #chart?: Chart;
 
-  requestRuntimeUpdate() { this.#chart?.requestUpdate(); }
+  requestRuntimeUpdate() {
+    this.#chart?.requestUpdate();
+  }
 
   renderSVG(chart: Chart) {
     this.#chart = chart;
-    const {
-      visible, x, y, width, height, href,
-    } = this.$runtime!.state;
+    const { visible, x, y, width, height, href } = this.$runtime!.state;
     if (!visible) return svg``;
     const widthValue = chart.x(width) - chart.x(0);
     const heightValue = chart.y(0) - chart.y(height);

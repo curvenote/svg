@@ -1,5 +1,12 @@
 import {
-  BaseComponent, withRuntime, html, svg, css, PropertyValues, throttle, THROTTLE_SKIP,
+  BaseComponent,
+  withRuntime,
+  html,
+  svg,
+  css,
+  PropertyValues,
+  throttle,
+  THROTTLE_SKIP,
 } from '@curvenote/components';
 import { types } from '@curvenote/runtime';
 import * as scale from 'd3-scale';
@@ -13,7 +20,11 @@ export const SvgChartSpec = {
   properties: {
     xlabel: { type: types.PropTypes.string, default: 'x' },
     ylabel: { type: types.PropTypes.string, default: 'y' },
-    xAxisLocation: { type: types.PropTypes.string, default: 'bottom', attribute: 'x-axis-location' },
+    xAxisLocation: {
+      type: types.PropTypes.string,
+      default: 'bottom',
+      attribute: 'x-axis-location',
+    },
     yAxisLocation: { type: types.PropTypes.string, default: 'left', attribute: 'y-axis-location' },
     labeled: { type: types.PropTypes.boolean, default: false },
     xlim: { type: types.PropTypes.array, default: [0, 1] },
@@ -44,12 +55,15 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     setTimeout(() => this.attachCallbacks(), 200);
 
     // Add a resize handler
-    window.addEventListener('resize', throttle(() => {
-      this.requestUpdate();
-    }, THROTTLE_SKIP));
+    window.addEventListener(
+      'resize',
+      throttle(() => {
+        this.requestUpdate();
+      }, THROTTLE_SKIP),
+    );
   }
 
-  private get dimensions(): { outerWidth: number, outerHeight: number} {
+  private get dimensions(): { outerWidth: number; outerHeight: number } {
     if (this.#initialized) {
       const { offsetWidth } = this.shadowRoot?.children[0] as HTMLDivElement;
       const aspect = this.width / this.height;
@@ -69,7 +83,14 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     const width = outerWidth - left - right;
     const height = outerHeight - top - bottom;
     return {
-      top, right, bottom, left, width, height, outerWidth, outerHeight,
+      top,
+      right,
+      bottom,
+      left,
+      width,
+      height,
+      outerWidth,
+      outerHeight,
     };
   }
 
@@ -80,13 +101,9 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
   updateDomainAndRange(margin: Required<Margin>) {
     const { xlim, ylim } = this.$runtime!.state;
 
-    this.x = scale.scaleLinear()
-      .range([0, margin.width])
-      .domain(xlim);
+    this.x = scale.scaleLinear().range([0, margin.width]).domain(xlim);
 
-    this.y = scale.scaleLinear()
-      .range([margin.height, 0])
-      .domain(ylim);
+    this.y = scale.scaleLinear().range([margin.height, 0]).domain(ylim);
   }
 
   renderXAxis(margin: Margin) {
@@ -101,18 +118,18 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     gXAxis.html(null);
     gXAxis
       .attr('class', 'x axis')
-      .attr('transform', `translate(0,${(xAxisLocation === 'bottom') ? margin.height : this.y(0)})`)
+      .attr('transform', `translate(0,${xAxisLocation === 'bottom' ? margin.height : this.y(0)})`)
       .call(xAxis);
 
-    const label = gXAxis.append('text')
+    const label = gXAxis
+      .append('text')
       .style('text-anchor', 'middle')
       .attr('fill', '#333')
       .text(xlabel);
     if (xAxisLocation === 'bottom') {
       label.attr('dy', 30).attr('x', margin.width / 2);
     } else {
-      label.attr('dy', -5).attr('x', margin.width)
-        .style('text-anchor', 'end');
+      label.attr('dy', -5).attr('x', margin.width).style('text-anchor', 'end');
     }
   }
 
@@ -128,9 +145,10 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     gYAxis.html(null);
     gYAxis
       .attr('class', 'y axis')
-      .attr('transform', `translate(${(yAxisLocation === 'left') ? 0 : this.x(0)}, 0)`)
+      .attr('transform', `translate(${yAxisLocation === 'left' ? 0 : this.x(0)}, 0)`)
       .call(yAxis);
-    const label = gYAxis.append('text')
+    const label = gYAxis
+      .append('text')
       .attr('transform', 'rotate(-90)')
       .style('text-anchor', 'middle')
       .attr('fill', '#333')
@@ -139,8 +157,7 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     if (yAxisLocation === 'left') {
       label.attr('dy', -35).attr('x', -margin.height / 2);
     } else {
-      label.attr('dy', 15).attr('x', 0)
-        .style('text-anchor', 'end');
+      label.attr('dy', 15).attr('x', 0).style('text-anchor', 'end');
     }
   }
 
@@ -162,8 +179,8 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     }
 
     const children = Array.from(this.children).map((child) => {
-      const chartObj = child as Element & { renderSVG: (chart: Element) => svg };
-      if (this.#initialized && (chartObj.renderSVG !== undefined)) {
+      const chartObj = child as Element & { renderSVG: (chart: Element) => typeof svg };
+      if (this.#initialized && chartObj.renderSVG !== undefined) {
         return chartObj.renderSVG(this);
       }
       return svg``;
@@ -173,12 +190,18 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
       <div>
         <svg width="${margin.outerWidth}" height="${margin.outerHeight}">
           <g transform="translate(${margin.left},${margin.top})">
-            <clipPath id="clip"><rect id="clip-rect" x="0" y="0" width="${margin.width}" height="${margin.height}"></rect></clipPath>
+            <clipPath id="clip">
+              <rect
+                id="clip-rect"
+                x="0"
+                y="0"
+                width="${margin.width}"
+                height="${margin.height}"
+              ></rect>
+            </clipPath>
             <g class="x axis"></g>
             <g class="y axis"></g>
-            <g clip-path="url(#clip)">
-              ${children}
-            </g>
+            <g clip-path="url(#clip)">${children}</g>
           </g>
         </svg>
       </div>
@@ -202,13 +225,14 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
       .x.axis path {
         /*display: none;*/
       }
-      .figure svg, .figure div{
+      .figure svg,
+      .figure div {
         position: relative;
         display: block;
         margin-left: auto;
         margin-right: auto;
       }
-      .drag{
+      .drag {
         cursor: move;
       }
     `;
