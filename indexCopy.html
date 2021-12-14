@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald" />
+  </head>
+  <body>
+    <article>
+      <h1>@curvenote/svg</h1>
+      <p>
+        The goal of <code>@curvenote/svg</code> is to provide web-components for interactive
+        scientific writing, reactive documents and
+        <a href="//explorabl.es/">explorable explanations</a>. Included in
+        <code>@curvenote/svg</code> are ways to create, update and display SVG diagrams.
+      </p>
+
+      <r-var name="initialCost" value="1000"></r-var>
+      <r-var name="learningRate" value="20"></r-var>
+
+      <r-svg-chart :xlim="[0.01, 1000000000]" :ylim="[0.01, 1000]" xAxisType="log" yAxisType="log" >
+        <r-svg-eqn eqn="1/x"></r-svg-eqn>
+      </r-svg-chart>
+
+
+    </article>
+  </body>
+</html>
