@@ -10,6 +10,7 @@ import {
 } from '@curvenote/components';
 import { types } from '@curvenote/runtime';
 import * as scale from 'd3-scale';
+import * as format from 'd3-format';
 import * as Selection from 'd3-selection';
 import * as d3axis from 'd3-axis';
 import { Margin } from './types';
@@ -29,6 +30,8 @@ export const SvgChartSpec = {
     labeled: { type: types.PropTypes.boolean, default: false },
     xlim: { type: types.PropTypes.array, default: [0, 1] },
     ylim: { type: types.PropTypes.array, default: [0, 1] },
+    xAxisType: { type: types.PropTypes.string, default: 'linear' },
+    yAxisType: { type: types.PropTypes.string, default: 'linear' },
   },
   events: {},
 };
@@ -94,16 +97,26 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     };
   }
 
+  
   x: scale.ScaleLinear<number, number> = scale.scaleLinear();
 
   y: scale.ScaleLinear<number, number> = scale.scaleLinear();
 
   updateDomainAndRange(margin: Required<Margin>) {
-    const { xlim, ylim } = this.$runtime!.state;
+    const { xlim, ylim, xAxisType, yAxisType } = this.$runtime!.state;
 
-    this.x = scale.scaleLinear().range([0, margin.width]).domain(xlim);
+    if(xAxisType=="log") {
+      this.x = scale.scaleLog().range([0, margin.width]).domain(xlim);
+    } else {
+      this.x = scale.scaleLinear().range([0, margin.width]).domain(xlim);
+    }
 
-    this.y = scale.scaleLinear().range([margin.height, 0]).domain(ylim);
+    if(yAxisType=="log") {
+      this.y = scale.scaleLog().range([margin.height, 0]).domain(ylim);;
+    } else {
+      this.y = scale.scaleLinear().range([margin.height, 0]).domain(ylim);
+    }
+
   }
 
   renderXAxis(margin: Margin) {
@@ -112,7 +125,10 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     if (xAxisLocation === 'hidden') {
       return;
     }
-    const xAxis = d3axis.axisBottom(this.x);
+
+    const numberOfTicks = 6 // always have 6 ticks on x axis
+
+    const xAxis = d3axis.axisBottom(this.x).ticks(numberOfTicks, ",.1f");
 
     const gXAxis = Selection.select(this.shadowRoot!.querySelector('.x.axis') as SVGSVGElement);
     gXAxis.html(null);
@@ -134,12 +150,21 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
   }
 
   renderYAxis(margin: Margin) {
-    const { yAxisLocation, ylabel } = this.$runtime!.state;
+    const { yAxisLocation, ylabel, ylim, yAxisType } = this.$runtime!.state;
     if (yAxisLocation === 'hidden') {
       return;
     }
 
-    const yAxis = d3axis.axisLeft(this.y);
+    var numberOfTicks
+    if(yAxisType=="log"){
+      numberOfTicks = Math.log10(ylim[1]/ylim[0])
+    } else {
+      numberOfTicks = "10"
+    }
+
+    const yAxis = d3axis.axisLeft(this.y).ticks(numberOfTicks, ",.3f");
+
+    // const yAxis = d3axis.axisLeft(this.y);
 
     const gYAxis = Selection.select(this.shadowRoot!.querySelector('.y.axis') as SVGSVGElement);
     gYAxis.html(null);
