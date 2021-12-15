@@ -29,7 +29,6 @@ export const SvgChartSpec = {
     labeled: { type: types.PropTypes.boolean, default: false },
     xlim: { type: types.PropTypes.array, default: [0, 1] },
     ylim: { type: types.PropTypes.array, default: [0, 1] },
-
     xAxisType: { type: types.PropTypes.string, default: 'linear', attribute: 'x-axis-type' },
     yAxisType: { type: types.PropTypes.string, default: 'linear', attribute: 'y-axis-type' },
   },
@@ -127,10 +126,10 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     const numberOfTicks = 6;
     let xAxis;
 
-    if (xAxisType === 'date') {
-      xAxis = d3axis.axisBottom(this.x).ticks(numberOfTicks, '.0f');
-    } else if (xAxisType === 'log') {
+    if (xAxisType === 'log') {
       xAxis = d3axis.axisBottom(this.x).ticks(numberOfTicks, ',.1f');
+    } else if (xAxisType === 'date') {
+      xAxis = d3axis.axisBottom(this.x).ticks(numberOfTicks, '.0f');
     } else {
       xAxis = d3axis.axisBottom(this.x);
     }
