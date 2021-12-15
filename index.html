@@ -26,11 +26,11 @@
       <r-svg-chart :xlabel="label" :xlim="[0, 100]" :ylim="[0, 100]">
         <r-svg-image
           :visible="visible"
-          href="https://components.ink/images/ink.png"
+          href="https://curvenote.dev/images/icon.png"
           :x="x"
           :y="y"
-          width="100"
-          height="100"
+          width="30"
+          height="30"
         ></r-svg-image>
         <r-svg-text :visible="visible"></r-svg-text>
         <r-svg-path
@@ -96,6 +96,17 @@
             :listen="a"
           ></r-svg-eqn>
           <r-svg-eqn eqn="func(x, a)"></r-svg-eqn>
+        </r-svg-chart>
+      </r-scope>
+
+      <r-scope name="log">
+        <r-svg-chart
+          xlabel="Date"
+          :ylim="[1, 1000]"
+          :xlim="[2000, 2022]"
+          x-axis-type="date"
+          y-axis-type="log"
+        >
         </r-svg-chart>
       </r-scope>
     </article>
