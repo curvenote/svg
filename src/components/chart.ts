@@ -124,16 +124,16 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
       return;
     }
 
-    const numberOfTicks = 6; // always have 6 ticks on x axis
+    const numberOfTicks = 6;
     let xAxis;
 
     if (xAxisType === 'date') {
       xAxis = d3axis.axisBottom(this.x).ticks(numberOfTicks, '.0f');
-    } else {
+    } else if (xAxisType === 'log') {
       xAxis = d3axis.axisBottom(this.x).ticks(numberOfTicks, ',.1f');
+    } else {
+      xAxis = d3axis.axisBottom(this.x);
     }
-
-    // xAxis = d3axis.axisBottom(this.x).ticks(numberOfTicks, ',.1f');
 
     const gXAxis = Selection.select(this.shadowRoot!.querySelector('.x.axis') as SVGSVGElement);
     gXAxis.html(null);
@@ -167,10 +167,8 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     } else if (yAxisType === 'date') {
       yAxis = d3axis.axisLeft(this.y).ticks(10, ',.0f');
     } else {
-      yAxis = d3axis.axisLeft(this.y).ticks(10, ',.2f');
+      yAxis = d3axis.axisLeft(this.y);
     }
-
-    // const yAxis = d3axis.axisLeft(this.y);
 
     const gYAxis = Selection.select(this.shadowRoot!.querySelector('.y.axis') as SVGSVGElement);
     gYAxis.html(null);
