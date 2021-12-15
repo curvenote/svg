@@ -125,11 +125,11 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
     }
 
     const numberOfTicks = 6; // always have 6 ticks on x axis
-    let xAxis
+    let xAxis;
 
-    if(xAxisType==="date"){
-      xAxis = d3axis.axisBottom(this.x).ticks(numberOfTicks,'.0f');
-    }else{
+    if (xAxisType === 'date') {
+      xAxis = d3axis.axisBottom(this.x).ticks(numberOfTicks, '.0f');
+    } else {
       xAxis = d3axis.axisBottom(this.x).ticks(numberOfTicks, ',.1f');
     }
 
@@ -160,15 +160,14 @@ class SvgChart extends BaseComponent<typeof SvgChartSpec> {
       return;
     }
 
-    let yAxis
+    let yAxis;
 
     if (yAxisType === 'log') {
       yAxis = d3axis.axisLeft(this.y).ticks(Math.log10(ylim[1] / ylim[0]), ',.2f');
-    } else if (yAxisType == 'date') {
+    } else if (yAxisType === 'date') {
       yAxis = d3axis.axisLeft(this.y).ticks(10, ',.0f');
     } else {
       yAxis = d3axis.axisLeft(this.y).ticks(10, ',.2f');
-
     }
 
     // const yAxis = d3axis.axisLeft(this.y);
